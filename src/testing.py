@@ -1,9 +1,36 @@
 from SQL import *
 
-def testing(url, uid, pw):
+def test_SQL(url, uid, pw):
 
     show_database(url, uid, pw)
-
     show_table(url, uid, pw)
-
-    
+    list1 = ('John', '123', '1')
+    insert_user(url, uid, pw, list1)
+    print("John inserted")
+    select_user(url, uid, pw, 'John')
+    print("John selected")
+    update_user(url, uid, pw, 'John', 'level', '3')
+    print("John updated")
+    select_user(url, uid, pw, 'John')
+    print("John selected")
+    delete_user(url, uid, pw, 'John')
+    print("John deleted")
+    list2 = ('apple', '1', 'kg')
+    insert_inventory(url, uid, pw, list2)
+    print("apple inserted")
+    select_inventory(url, uid, pw, 'apple')
+    print("apple selected")
+    update_inventory(url, uid, pw, 'apple', 'amount', '2')
+    print("apple updated")
+    select_inventory(url, uid, pw, 'apple')
+    print("apple selected")
+    delete_inventory(url, uid, pw, 'apple')
+    print("apple deleted")
+    drop_user(url, uid, pw)
+    print("user dropped")
+    drop_inventory(url, uid, pw)
+    print("inventory dropped")
+    show_table(url, uid, pw)
+    drop_database(url, uid, pw)
+    print("db dropped")
+    show_database(url, uid, pw)

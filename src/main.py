@@ -31,9 +31,9 @@ def main():
 
         shutdown = 0 # Set to 1 will break while loop and thus exit program
 
-        #############
-        # MAIN CODE #
-        #############
+        ##################
+        # MAIN CODE HERE #
+        ##################
 
         # testing
         test_SQL(url, uid, pw)
