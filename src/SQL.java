@@ -17,9 +17,9 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS user(" + 
-									"	username    CHAR(10)," + 
-									"   password    VARCHAR(20)," + 
-									"   level       INTEGER," + 
+									"	username    CHAR(10) NOT NULL," + 
+									"   password    VARCHAR(20) NOT NULL," + 
+									"   level       INTEGER NOT NULL," + 
 									"   PRIMARY KEY(username))");
 			} catch (SQLException e) {
 				// TO DO: Error handling
@@ -29,9 +29,9 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS inventory(" + 
-									"	itemname    CHAR(10)," + 
-									"   amount    	FLOAT," + 
-									"   unit        VARCHAR(5)," + 
+									"	itemname    CHAR(10) NOT NULL," + 
+									"   amount    	DOUBLE NOT NULL," + 
+									"   unit        VARCHAR(5) NOT NULL," + 
 									"   PRIMARY KEY(itemname))");
 			} catch (SQLException e) {
 				// TO DO: Error handling
@@ -43,7 +43,7 @@ public class SQL {
 	public static boolean trySQLCredential(String url, String uid, String pw) {
 		try (Connection con = DriverManager.getConnection(url, uid, pw);)
 			{
-				System.out.println("SQL Credential is good.");
+				System.out.println("\nSQL Credential is good.");
 				return true;
 			} catch (SQLException e) {
 				// TO DO: Error handling
@@ -57,6 +57,7 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("DROP DATABASE db");
+				System.out.println("DATABASE db is dropped.");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
@@ -68,6 +69,7 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("DROP TABLE user");
+				System.out.println("TABLE user is dropped.");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
@@ -79,6 +81,7 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("DROP TABLE inventory");
+				System.out.println("TABLE inventory is dropped.");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
@@ -90,8 +93,9 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				ResultSet rst = stmt.executeQuery("SHOW DATABASES");
+				System.out.println("List of databases: ");
 				while(rst.next()) {
-					System.out.println(rst.getString("Database"));
+					System.out.println("  -" + rst.getString("Database"));
 				}
 			} catch (SQLException e) {
 				// TO DO: Error handling
@@ -105,8 +109,9 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				ResultSet rst = stmt.executeQuery("SHOW TABLES");
+				System.out.println("List of tables in db:");
 				while(rst.next()) {
-					System.out.println(rst.getString("Tables_in_db"));
+					System.out.println("  -" + rst.getString("Tables_in_db"));
 				}
 			} catch (SQLException e) {
 				// TO DO: Error handling
@@ -119,6 +124,7 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("DELETE FROM user WHERE username = " + "'" + key + "'");
+				System.out.println(key + " is deleted from user.");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
@@ -130,86 +136,99 @@ public class SQL {
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("DELETE FROM inventory WHERE itemname = " + "'" + key + "'");
+				System.out.println(key + " is deleted from inventory.");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
 			}
 	}
-	// select user
-	public static void selectUser(String url, String uid, String pw, String key) {
+	// select one user, JUST ONE USER
+	public static User selectUser(String url, String uid, String pw, String key) {
+		User output = new User();
 		try (Connection con = DriverManager.getConnection(url, uid, pw);
 				Statement stmt = con.createStatement();)
 			{
 				ResultSet rst = stmt.executeQuery("SELECT * FROM user WHERE username = "  + "'" + key + "'");
 				while(rst.next()) {
-					System.out.println(rst.getString("username") + ", " + rst.getString("password") + ", " + rst.getInt("level"));
+					output.setUsername(rst.getString("username"));
+					output.setPassword(rst.getString("password"));
+					output.setLevel(rst.getInt("level"));
 				}
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
 			}
+		return output;
 	}
-	// select inventory
-	public static void selectInventory(String url, String uid, String pw, String key) {
+	// select one item, JUST ONE ITEM
+	public static Item selectInventory(String url, String uid, String pw, String key) {
+		Item output = new Item();
 		try (Connection con = DriverManager.getConnection(url, uid, pw);
 				Statement stmt = con.createStatement();)
 			{
 				ResultSet rst = stmt.executeQuery("SELECT * FROM inventory WHERE itemname = "  + "'" + key + "'");
 				while(rst.next()) {
-					System.out.println(rst.getString("itemname") + ", " + rst.getFloat("amount") + ", " + rst.getString("unit"));
+					output.setItemname(rst.getString("itemname"));
+					output.setAmount(rst.getDouble("amount"));
+					output.setUnit(rst.getString("unit"));
 				}
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
 			}
+		return output;
 	}
 	// insert user
-	public static void insertUser(String url, String uid, String pw, String[] list ) {	
+	public static void insertUser(String url, String uid, String pw, User input ) {	
 		String query = "INSERT INTO user VALUES (?, ?, ?)";
 		try (Connection con = DriverManager.getConnection(url, uid, pw);
 				PreparedStatement pstmt = con.prepareStatement(query);)
 			{
-				pstmt.setString(1, list[0]);
-				pstmt.setString(2, list[1]);
-				pstmt.setString(3, list[2]);
+				pstmt.setString(1, input.getUsername());
+				pstmt.setString(2, input.getPassword());
+				pstmt.setInt(3, input.getLevel());
 				pstmt.executeUpdate();
+				System.out.println(input.getUsername() + " inserted into user.");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
 			}
 	}
 	// insert inventory
-	public static void insertInventory(String url, String uid, String pw, String[] list ) {	
+	public static void insertInventory(String url, String uid, String pw, Item input ) {	
 		String query = "INSERT INTO inventory VALUES (?, ?, ?)";
 		try (Connection con = DriverManager.getConnection(url, uid, pw);
 				PreparedStatement pstmt = con.prepareStatement(query);)
 			{
-				pstmt.setString(1, list[0]);
-				pstmt.setString(2, list[1]);
-				pstmt.setString(3, list[2]);
+				pstmt.setString(1, input.getItemname());
+				pstmt.setDouble(2, input.getAmount());
+				pstmt.setString(3, input.getUnit());
 				pstmt.executeUpdate();
+				System.out.println(input.getItemname() + " inserted into inventory.");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
 			}
 	}
-	// update user
+	// update user, change to accept user object if needed
 	public static void updateUser(String url, String uid, String pw, String key, String column, String value) {
 		try (Connection con = DriverManager.getConnection(url, uid, pw);
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("UPDATE user SET " + column + "=" + value + " WHERE username = " + "'" + key + "'");
+				System.out.println(column + " of " + key + " has been updated to " + value + ".");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);
 			}
 	}
-	// update inventory
+	// update inventory, change to accept item object if needed
 	public static void updateInventory(String url, String uid, String pw, String key, String column, String value) {
 		try (Connection con = DriverManager.getConnection(url, uid, pw);
 				Statement stmt = con.createStatement();)
 			{
 				stmt.executeUpdate("UPDATE inventory SET " + column + "=" + value + " WHERE itemname = " + "'" + key + "'");
+				System.out.println(column + " of " + key + " has been updated to " + value + ".");
 			} catch (SQLException e) {
 				// TO DO: Error handling
 				System.out.println(e);

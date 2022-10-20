@@ -4,41 +4,29 @@ public class testing {
 	public static void testSQL(String url, String uid, String pw) {
 		
 		SQL.showDatabase(url, uid, pw);
-		System.out.println("db showed");
 		SQL.showTable(url, uid, pw);
-		System.out.println("table showed");
-		String[] list1 = {"John", "123", "1"};
-		SQL.insertUser(url, uid, pw, list1);
-		System.out.println("john inserted");
-		SQL.selectUser(url, uid, pw, "John");
-		System.out.println("john selected");
+		User user = new User("John", "123", 1);
+		SQL.insertUser(url, uid, pw, user);
+		User out1 = SQL.selectUser(url, uid, pw, "John");
+		System.out.println(out1.getUsername() + " " + out1.getPassword() + " " + out1.getLevel());
 		SQL.updateUser(url, uid, pw, "John", "level", "3");
-		System.out.println("john updated");
-		SQL.selectUser(url, uid, pw, "John");
-		System.out.println("john selected");
+		out1 = SQL.selectUser(url, uid, pw, "John");
+		System.out.println(out1.getUsername() + " " + out1.getPassword() + " " + out1.getLevel());
 		SQL.deleteUser(url, uid, pw, "John");
-		System.out.println("john deleted");
-		String[] list2 = {"apple", "1", "kg"};
-		SQL.insertInventory(url, uid, pw, list2);
-		System.out.println("apple inserted");
-		SQL.selectInventory(url, uid, pw, "apple");
-		System.out.println("apple selected");
+		Item item = new Item("apple", 1, "kg");
+		SQL.insertInventory(url, uid, pw, item);
+		Item out2 = SQL.selectInventory(url, uid, pw, "apple");
+		System.out.println(out2.getItemname() + " " + out2.getAmount() + " " + out2.getUnit());
 		SQL.updateInventory(url, uid, pw, "apple", "amount", "2");
-		System.out.println("apple updated");
-		SQL.selectInventory(url, uid, pw, "apple");
-		System.out.println("apple seleted");
+		out2 = SQL.selectInventory(url, uid, pw, "apple");
+		System.out.println(out2.getItemname() + " " + out2.getAmount() + " " + out2.getUnit());
 		SQL.deleteInventory(url, uid, pw, "apple");
-		System.out.println("apple deleted");
 		SQL.dropUser(url, uid, pw);
-		System.out.println("user dropped");
 		SQL.dropInventory(url, uid, pw);
-		System.out.println("inventory dropped");
 		SQL.dropDatabase(url, uid, pw);
-		System.out.println("db dropped");
 		url = "jdbc:mysql://localhost/";
 		SQL.showDatabase(url, uid, pw);
-		System.out.println("");
-		
+
 	}
 
 }
