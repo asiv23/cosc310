@@ -178,6 +178,37 @@ public class SQL {
 			}
 		return output;
 	}
+	
+	// Print users without password field
+	public static void displayUser(String url, String uid, String pw) {
+		try (Connection con = DriverManager.getConnection(url, uid, pw);
+				Statement stmt = con.createStatement();)
+			{
+				ResultSet rst = stmt.executeQuery("SELECT * FROM user");
+				while(rst.next()) {
+					System.out.printf("    %-10s Level: %d\n", rst.getString("username"), rst.getInt("level"));
+				}
+			} catch (SQLException e) {
+				// TO DO: Error handling
+				System.out.println(e);
+			}
+	}
+	
+	// Print inventory
+	public static void displayInventory(String url, String uid, String pw) {
+		try (Connection con = DriverManager.getConnection(url, uid, pw);
+				Statement stmt = con.createStatement();)
+			{
+				ResultSet rst = stmt.executeQuery("SELECT * FROM inventory");
+				while(rst.next()) {
+					System.out.printf("    %-10s %f %-5s\n", rst.getString("itemname"), rst.getDouble("amount"), rst.getString("unit"));
+				}
+			} catch (SQLException e) {
+				// TO DO: Error handling
+				System.out.println(e);
+			}
+	}
+	
 	// insert user
 	public static void insertUser(String url, String uid, String pw, User input ) {	
 		String query = "INSERT INTO user VALUES (?, ?, ?)";

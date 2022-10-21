@@ -17,9 +17,14 @@ public class Main {
 		url = url + "db";
 		int loggedIn = 0;
 		
-		System.out.println("Temporay user info. username = admin, password = 123456.");
-		User tempUser = new User("admin", "123456", 1);
-		SQL.insertUser(url, uid, pw, tempUser);
+		User temp = SQL.selectUser(url, uid, pw, "admin");
+		if(temp.getUsername() == null) {
+			System.out.println("\n-----Intial setup-----\nCreating defualt user: admin, please refer to software documentation for password.");
+			User tempUser = new User("admin", "123456", 1);
+			SQL.insertUser(url, uid, pw, tempUser);
+		}
+		
+		
 		
 		while(true) {
 			// MAIN PROGRAM LOOP
@@ -32,36 +37,34 @@ public class Main {
 			int userInput = menu();
 			
 			if(userInput == 1) {
-				addItem();
+				addItem(url, uid, pw);
 			}
 			else if(userInput == 2) {
-				incrItem();
+				incrItem(url, uid, pw);
 			}
 			else if(userInput == 3){
-				decrItem();
+				decrItem(url, uid, pw);
 			}
 			else if(userInput == 4) {
-				removeItem();
+				removeItem(url, uid, pw);
 			}
-			else if(userInput == 5) {
-				changeUserInfo();
+			//else if(userInput == 5) {
+			//	changeUserInfo();
+			//}
+			else if(userInput == 5) { // was 6
+				displayInventory(url, uid, pw);
 			}
-			else if(userInput == 6) {
+			else if(userInput == 6) { // was 7
 				loggedIn = 0; // Log out
 				System.out.println("\nLogged out.");
 				continue;
 			}
 			else {
-				// -------------Temporary------------------
-				SQL.dropInventory(url, uid, pw);
-				SQL.dropUser(url, uid, pw);
-				SQL.dropDatabase(url, uid, pw);
-				// -------------Temporary------------------
-				
-				System.out.println("\nGoodbye");
+				System.out.println("\nGoodbye"); 
 				break; // Exit
 			}
-			
+			// TO DO: expand option 5 into sub menu
+			// TO DO: option to DROP table and database
 		}
 
 	}
@@ -73,7 +76,7 @@ public class Main {
 		while(true) {
 			
 			System.out.println("\nEnter SQL credential.");
-			System.out.print("Enter url: ");
+			System.out.print("\nEnter SQL url: ");
 			url = "jdbc:mysql://" + s.nextLine() + "/";
 			System.out.print("Enter SQL user name: ");
 			uid = s.nextLine();
@@ -98,20 +101,21 @@ public class Main {
 			
 		while(true) {
 			
-			System.out.println("\n");
+			System.out.println("\n--------------------------------------------------\n");
 			System.out.println("1. Add a new item to inventory");
 			System.out.println("2. Increase amount of existing item");
 			System.out.println("3. Decrease amount of existing item");
 			System.out.println("4. Remove item from inventory");
-			System.out.println("5. Change user infomation");
-			System.out.println("6. Log out");
-			System.out.println("7. Shut down");
+			System.out.println("5. Display inventory");
+			//System.out.println("6. Change user information"); // To be implemented
+			System.out.println("6. Log out"); //was 7
+			System.out.println("7. Shut down"); //was 8
 			System.out.print("\nEnter 1 - 7: ");
 			
 			int input = s.nextInt();
 			s.nextLine();// Capture the \n from user hitting enter
 			
-			if(input >= 1 & input <= 7) {
+			if(input >= 1 & input <= 8) { // May need to do more user input verification
 				return input;
 			}
 			else {
@@ -144,26 +148,71 @@ public class Main {
 				continue;
 			}
 			
+			System.out.println("\nLogged in as " + temp.getUsername() + ".\n");
 			return temp.getLevel();
 			
 		}
 		
 	}
 	
-	public static void addItem() {
-		System.out.println("To be implmented.");
+	public static void addItem(String url, String uid, String pw) {
+		
+		System.out.println("\nEnter item info");
+		System.out.print("Enter item name: "); // TO DO: check string length, check if exists
+		String itemname = s.nextLine();
+		System.out.print("Enter amount: ");
+		double amount = s.nextDouble();
+		s.nextLine();// Capture the \n from user hitting enter
+		System.out.print("Enter unit: ");
+		String unit = s.nextLine(); // TO DO: check string length
+		
+		Item item = new Item(itemname, amount, unit);
+		
+		SQL.insertInventory(url, uid, pw, item);
+		
 	}
 	
-	public static void incrItem() {
-		System.out.println("To be implmented.");
+	public static void incrItem(String url, String uid, String pw) {
+		
+		System.out.println("\nEnter item info");
+		System.out.print("Enter item name: "); // TO DO: check if exists, right now possible crash if item does not exist
+		String itemname = s.nextLine();
+		System.out.print("Enter amount to be added: ");
+		double amount = s.nextDouble();
+		
+		Item fromDB = SQL.selectInventory(url, uid, pw, itemname);
+		double amountFromDB = fromDB.getAmount();
+		amount = amount + amountFromDB;
+		SQL.updateInventory(url, uid, pw, fromDB.getItemname(), "amount", amount + ""); // TO DO: better way to turn double into string, or find a way to use double
+		
 	}
 	
-	public static void decrItem() {
-		System.out.println("To be implmented.");
+	public static void decrItem(String url, String uid, String pw) {
+		
+		System.out.println("\nEnter item info");
+		System.out.print("Enter item name: "); // TO DO: check if exists, right now possible crash if item does not exist
+		String itemname = s.nextLine();
+		System.out.print("Enter amount to be removed: ");
+		double amount = s.nextDouble();
+		
+		Item fromDB = SQL.selectInventory(url, uid, pw, itemname);
+		double amountFromDB = fromDB.getAmount();
+		amount = amountFromDB - amount; // TO DO: check if amountFromDB is larger than amount, right now it can go negative
+		SQL.updateInventory(url, uid, pw, fromDB.getItemname(), "amount", amount + ""); // TO DO: better way to turn double into string, or find a way to use double
+		
 	}
 	
-	public static void removeItem() {
-		System.out.println("To be implmented.");
+	public static void removeItem(String url, String uid, String pw) {
+		
+		System.out.print("Enter item name: "); // TO DO: check if exists, right now possible crash if item does not exist
+		String itemname = s.nextLine();
+		SQL.deleteInventory(url,  uid, pw, itemname);
+		
+	}
+	
+	public static void displayInventory(String url, String uid, String pw) {
+		SQL.displayInventory(url, uid, pw);
+		// TO DO: display empty if inventory is empty
 	}
 	
 	public static void changeUserInfo() {
