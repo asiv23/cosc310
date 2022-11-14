@@ -110,7 +110,8 @@ public class Main {
 			//System.out.println("6. Change user information"); // To be implemented
 			System.out.println("6. Log out"); //was 7
 			System.out.println("7. Shut down"); //was 8
-			System.out.print("\nEnter 1 - 7: ");
+			System.out.println("8. Generate Report");
+			System.out.print("\nEnter 1 - 8: ");
 			
 			int input = s.nextInt();
 			s.nextLine();// Capture the \n from user hitting enter
@@ -217,6 +218,19 @@ public class Main {
 	
 	public static void changeUserInfo() {
 		System.out.println("To be implmented.");
+	}
+	
+	public static void generateReport(String url, String uid, String pw) {
+		System.out.println("Implementation in progress.");
+//		Document document = new Document();
+//		PdfWriter.getInstance(document, new FileOutputStream("sampleReport.pdf"));
+//
+//		document.open();
+//		Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+//		Chunk chunk = new Chunk("Hello World", font);
+//
+//		document.add(chunk);
+//		document.close();
 	}
 	
 }
