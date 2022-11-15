@@ -201,9 +201,13 @@ public class Main {
 		
 		Item fromDB = SQL.selectInventory(url, uid, pw, itemname);
 		double amountFromDB = fromDB.getAmount();
-		amount = amountFromDB - amount; // TO DO: check if amountFromDB is larger than amount, right now it can go negative
-		SQL.updateInventory(url, uid, pw, fromDB.getItemname(), "amount", amount + ""); // TO DO: better way to turn double into string, or find a way to use double
-		
+		if (amountFromDB < amount) {
+			System.out.println("Cannot have negative inventory. Item quantity has not been updated");
+		}
+		else {
+			amount = amountFromDB - amount;
+			SQL.updateInventory(url, uid, pw, fromDB.getItemname(), "amount", amount + ""); // TO DO: better way to turn double into string, or find a way to use double
+		}
 	}
 	
 	public static void removeItem(String url, String uid, String pw) {
