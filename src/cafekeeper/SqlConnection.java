@@ -15,7 +15,7 @@ public class SqlConnection {
 	
 	public static Connection dbConnector() throws Exception {	
 		try {
-			con = (Connection)DriverManager.getConnection("jdbc:mysql://localhost:3306/pataromadatabase", "root", "Fradyd0!");
+			con = (Connection)DriverManager.getConnection("jdbc:mysql://localhost:3306/pataromadatabase", "root", "cosc310");
 			
 			if (con != null) {
 				System.out.println("database is connected");
