@@ -51,10 +51,13 @@ public class Main {
 			//else if(userInput == 5) {
 			//	changeUserInfo();
 			//}
-			else if(userInput == 5) { // was 6
+			else if(userInput == 5) {
 				displayInventory(url, uid, pw);
 			}
-			else if(userInput == 6) { // was 7
+			else if(userInput == 6) {
+				generateReport(url, uid, pw);
+			}
+			else if(userInput == 7) {
 				loggedIn = 0; // Log out
 				System.out.println("\nLogged out.");
 				continue;
@@ -108,9 +111,9 @@ public class Main {
 			System.out.println("4. Remove item from inventory");
 			System.out.println("5. Display inventory");
 			//System.out.println("6. Change user information"); // To be implemented
-			System.out.println("6. Log out"); //was 7
-			System.out.println("7. Shut down"); //was 8
-			System.out.println("8. Generate Report");
+			System.out.println("6. Generate report");
+			System.out.println("7. Log out");
+			System.out.println("8. Shut down");
 			System.out.print("\nEnter 1 - 8: ");
 			
 			int input = s.nextInt();
