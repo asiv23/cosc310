@@ -9,6 +9,7 @@ As of the current submission, the project includes methods to add items, increme
 Implemented new tables (sales and suppliers) with respective GUI to add and edit table. Connected the coffee, sales and suppliers to the main (test) interface.
 
 ## Feature 2:
+Connect to SQL
 
 ## API
 1. JAVA SWING (https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html) - used to create GUI
