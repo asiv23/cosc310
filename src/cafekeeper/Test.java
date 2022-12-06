@@ -100,7 +100,7 @@ public class Test extends JFrame {//start class
 	 * Create the frame.
 	 */
 	public Test() {
-		setTitle("PATROMA DATABASE");		
+		setTitle("CAFEKEEPER");		
 		
 		//set up contentpane
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
