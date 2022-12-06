@@ -11,4 +11,4 @@ Implemented new tables (sales and suppliers) with respective GUI to add and edit
 ## Feature 2:
 
 ## API
-1. JAVA SWING - used to create GUI
+1. JAVA SWING (https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html) - used to create GUI
