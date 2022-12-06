@@ -36,7 +36,7 @@ public class Test extends JFrame {//start class
 	private static String[] selectedTbl = {"COFFEE", "PASTRIES", "SALES", "SUPPLIERS"};//the different tables in the database
 	private static String selectTbl = ("");//selecting a table
 	private static int menuNum = 0;//which menue are you on
-	private static int x = 130, y = 213, t = 0, temp = -1;//ints for setting bounds on contentpane & temporary placements
+	private static int x = 130, y = 213, t = 0, temp = -1, tablenum = 1;//ints for setting bounds on contentpane & temporary placements
 		
 	//state variables for main menu interface
 	private static JLabel lblActions = new JLabel("ACTIONS");//lable for actions able to perfomed on the interface
@@ -63,7 +63,7 @@ public class Test extends JFrame {//start class
 	//variables for add/edit
 	private static int fieldNum = 9;
 	private static JLabel[] dataFields = new JLabel[6];
-	private static String[] coffeeFields = {"Bag ID: ", "Ground: ", "Size(kg): ", "Cost:", "Best Before: ", "Comments:"};
+	private static String[] coffeeFields = {"ID: ", "Ground: ", "Size(kg): ", "Cost:", "Best Before: ", "Comments:"};
 	static String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	private static JTextField fieldsEntry = new JTextField();
 	static String[] grounds = {"Bean", "Filtered", "French Pressed", "Esspresso"};
@@ -100,7 +100,7 @@ public class Test extends JFrame {//start class
 	 * Create the frame.
 	 */
 	public Test() {
-		setTitle("CAFEKEEPER");		
+		setTitle("CAFE KEEPER");		
 		
 		//set up contentpane
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -196,24 +196,18 @@ public class Test extends JFrame {//start class
 				tblSelect[row][column].setBounds(x, y, 264, 119);
 				tblSelect[row][column].setFont(new Font("Courier New", Font.BOLD, 40));
 				
-				int counterT = t;				
+				if(row == 0 && column == 0)
+					tablenum = 1;
+				else if (row == 0 && column == 1)
+					tablenum = 2;
+				else if (row == 0 && column == 1)
+					tablenum = 3;
+				else if (row == 0 && column == 1)
+					tablenum = 4;
 				tblSelect[row][column].addActionListener(new ActionListener() { // if pressed on...						
 					public void actionPerformed(ActionEvent e) {//start actionPerformed
-						if (pressed == true) {//if the start button is pressed									
-							if (counterT == 0) {//set up coffee interface
-								//	Menu("CURRENT INVENTORY");
-								lblCK.setBounds(10, 10, 545, 89);
-								selectTbl = ("COFFEE");
-								
-								temp = counterT;
-							} else if (counterT == 2) {//set up sales interface
-								Menu("SALES DATA");
-								temp = counterT;
-							} else {//else
-							Menu(selectedTbl[counterT]);
-							selectTbl = (selectedTbl[counterT]);
-							temp = counterT;
-							}//end else 
+						if (pressed == true) {//if the start button is pressed
+							open(tablenum);
 						}//end if
 					}//end actionPerformed
 				});//end actionListener
@@ -387,13 +381,38 @@ public class Test extends JFrame {//start class
 		switch (N) {
 		case 1:
 			try {
-				//Coffee frame = new Coffee();
-				//frame.setVisible(true);
+				Coffee frame = new Coffee();
+				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
-		}
+		case 2:
+			try {
+				Coffee frame = new Coffee();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case 3:
+			try {
+				Sales frame = new Sales();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case 4:
+			try {
+				Supplier frame = new Supplier();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		}		
+		
 	}
 	
 	public static Connection dbConnector() throws Exception {	
