@@ -5,7 +5,7 @@ CafeKeeper is an inventory management system for a cafe. The system includes a d
 
 As of the current submission, the project includes methods to add items, increment/ decrement the quantities of items currently in the database, remove items from database, and display the current inventory items in the database. We have begun work on report generation, and user creation functionalities. 
 
-## Feature 1: Add/edit functions 
+## Feature 1: Add/Edit functions 
 
 ## Feature 2
 
